@@ -31,6 +31,12 @@ namespace BethanysPieShopHRM
             services.AddHttpClient<IEmployeeDataService, EmployeeDataService>( 
                 client => client.BaseAddress = new Uri( "https://localhost:44340/" ) );
 
+            services.AddHttpClient<ICountryDataService, CountryDataService>(
+                client => client.BaseAddress = new Uri( "https://localhost:44340/" ) );
+
+            services.AddHttpClient<IJobCategoryDataService, JobCategoryDataService>(
+                client => client.BaseAddress = new Uri( "https://localhost:44340/" ) );
+
             services.AddServerSideBlazor( )
                     .AddCircuitOptions( options => { options.DetailedErrors = true; } );
         }
