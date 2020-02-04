@@ -1,17 +1,26 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BethanysPieShopHRM.Shared
 {
     public class Employee
     {
         public int EmployeeId { get; set; }
+
+        [Required]
+        [StringLength( 50, ErrorMessage = "First name is too long." )]
         public string FirstName { get; set; }
 
+        [Required]
+        [StringLength( 50, ErrorMessage = "Last name is too long." )]
         public string LastName { get; set; }
 
         public DateTime BirthDate { get; set; }
 
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
+
         public string Street { get; set; }
         public string Zip { get; set; }
         public string City { get; set; }
@@ -21,6 +30,8 @@ namespace BethanysPieShopHRM.Shared
         public bool Smoker { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
         public Gender Gender { get; set; }
+
+        [StringLength( 1000, ErrorMessage = "Comment is too long." )]
         public string Comment { get; set; }
         public DateTime? JoinedDate { get; set; }
         public DateTime? ExitDate { get; set; }

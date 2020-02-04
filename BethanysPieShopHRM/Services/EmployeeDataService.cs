@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -22,9 +23,19 @@ namespace BethanysPieShopHRM.Services
         }
 
 
-        public Task<Employee> AddEmployee( Employee employee ) => throw new NotImplementedException( );
+        public async Task<Employee> AddEmployee( Employee employee )
+        {
+            var employeeJson = new StringContent( JsonSerializer.Serialize( employee ), Encoding.UTF8, "application/json" );
+            var response = await _httpClient.PostAsync( "api/employee", employeeJson );
 
-        public Task DeleteEmployee( int employeeID ) => throw new NotImplementedException( );
+            if ( response.IsSuccessStatusCode )
+                return await JsonSerializer.DeserializeAsync<Employee>( await response.Content.ReadAsStreamAsync( ) );
+
+            return null;
+        }
+
+        public async Task DeleteEmployee( int employeeID ) =>
+            await _httpClient.DeleteAsync( $"api/employee/{employeeID}" );
 
         public async Task<IEnumerable<Employee>> GetAllEmployees( ) =>        
             await JsonSerializer.DeserializeAsync<IEnumerable<Employee>>(
@@ -35,6 +46,12 @@ namespace BethanysPieShopHRM.Services
             await JsonSerializer.DeserializeAsync<Employee>(
                 await _httpClient.GetStreamAsync( $"api/employee/{employeeID}" ), _jsonSerializerOptions );
 
-        public Task UpdateEmployee( Employee employee ) => throw new NotImplementedException( );
+        public async Task UpdateEmployee( Employee employee )
+        {
+            var employeeJson =
+                new StringContent( JsonSerializer.Serialize( employee ), Encoding.UTF8, "application/json" );
+
+            await _httpClient.PutAsync( "api/employee", employeeJson );
+        }
     }
 }
