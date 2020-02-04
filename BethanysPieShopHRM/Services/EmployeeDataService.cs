@@ -1,4 +1,5 @@
 ﻿using BethanysPieShopHRM.Shared;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,13 @@ namespace BethanysPieShopHRM.Services
     public class EmployeeDataService : IEmployeeDataService
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-        public EmployeeDataService( HttpClient httpClient )
+        public EmployeeDataService( HttpClient httpClient, IHttpContextAccessor httpContextAccessor )
         {
             _httpClient = httpClient;
-
+            _httpContextAccessor = httpContextAccessor;
             _jsonSerializerOptions = 
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         }

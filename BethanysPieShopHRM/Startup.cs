@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BethanysPieShopHRM.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,14 @@ namespace BethanysPieShopHRM
         {
             services.AddRazorPages( );
 
+            services.AddServerSideBlazor( )
+                    .AddCircuitOptions( options => { options.DetailedErrors = true; } );
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>( );
+
+            services.AddAuthentication( CookieAuthenticationDefaults.AuthenticationScheme )
+                .AddCookie( );
+
             services.AddHttpClient<IEmployeeDataService, EmployeeDataService>( 
                 client => client.BaseAddress = new Uri( "https://localhost:44340/" ) );
 
@@ -35,10 +45,7 @@ namespace BethanysPieShopHRM
                 client => client.BaseAddress = new Uri( "https://localhost:44340/" ) );
 
             services.AddHttpClient<IJobCategoryDataService, JobCategoryDataService>(
-                client => client.BaseAddress = new Uri( "https://localhost:44340/" ) );
-
-            services.AddServerSideBlazor( )
-                    .AddCircuitOptions( options => { options.DetailedErrors = true; } );
+                client => client.BaseAddress = new Uri( "https://localhost:44340/" ) );            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +66,9 @@ namespace BethanysPieShopHRM
             app.UseStaticFiles( );
 
             app.UseRouting( );
+
+            app.UseAuthentication( );
+            app.UseAuthorization( );
 
             app.UseEndpoints( endpoints =>
              {

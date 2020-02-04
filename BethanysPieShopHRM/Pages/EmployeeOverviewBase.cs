@@ -1,6 +1,7 @@
 ﻿using BethanysPieShopHRM.Components;
 using BethanysPieShopHRM.Services;
 using BethanysPieShopHRM.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace BethanysPieShopHRM.Pages
 {
+    [Authorize]
     public class EmployeeOverviewBase : ComponentBase
     {
 
