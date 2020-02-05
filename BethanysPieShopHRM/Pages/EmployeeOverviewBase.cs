@@ -3,6 +3,7 @@ using BethanysPieShopHRM.Services;
 using BethanysPieShopHRM.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace BethanysPieShopHRM.Pages
         [Inject]
         public IEmployeeDataService EmployeeDataService { get; set; }
 
+        [CascadingParameter]
+        public Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
         protected override async Task OnInitializedAsync( )
         {
@@ -28,8 +31,12 @@ namespace BethanysPieShopHRM.Pages
 
         public IEnumerable<Employee> Employees { get; set; }
 
-        protected void QuickAddEmployee( ) =>
-            AddEmployeeDialog.Show( );
+        protected async Task QuickAddEmployee( )
+        {
+            var authenticationState = await AuthenticationStateTask;
+            if ( authenticationState.User.Identity.Name.CompareTo( "Warren") == 0 )
+                AddEmployeeDialog.Show( );
+        }
 
         public async void OnDialogClose( )
         {
